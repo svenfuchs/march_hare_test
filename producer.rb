@@ -5,7 +5,7 @@ require 'march_hare'
 name = 'builds.2'
 connection = MarchHare.connect user: 'travis', password: 'travis', vhost: 'travis'
 channel = connection.create_channel
-exchange = channel.direct(name, durable: true, auto_delete: false)
+exchange = channel.direct('', durable: true, auto_delete: false)
 
 loop do
   sleep 2
