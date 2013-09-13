@@ -1,0 +1,21 @@
+GIT
+  remote: git://github.com/ruby-amqp/march_hare.git
+  revision: 2e36f5c0e0ad49e0367518d5f06ad00b835c0868
+  specs:
+    march_hare (2.0.0.rc2wip-java)
+
+GIT
+  remote: git://github.com/travis-ci/travis-support.git
+  revision: 7c69fe727968b31551ce3acbe0d4f2e0e5bc8fa3
+  specs:
+    travis-support (0.0.1)
+
+GEM
+  specs:
+
+PLATFORMS
+  java
+
+DEPENDENCIES
+  march_hare!
+  travis-support!
