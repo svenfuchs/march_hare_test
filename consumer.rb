@@ -14,7 +14,7 @@ class Consumer
     # Creating the reporter early (so it is not created within the `process`
     # callback) will throw "Attempt to use closed channel" after rabbitmq-server
     # has been restarted: https://gist.github.com/svenfuchs/e5e5717977d973df6521
-    @reporter = Reporter.new(connection.create_channel)
+    # @reporter = Reporter.new(connection.create_channel)
   end
 
   def subscribe
@@ -25,9 +25,10 @@ class Consumer
   def process(meta, payload)
     puts "[#{num}] received: #{payload}"
     reporter.message('job:test:start', payload)
-    meta.ack
   rescue Exception => e
     puts e.message, e.backtrace
+  ensure
+    meta.ack
   end
 
   def builds_queue
@@ -40,9 +41,9 @@ class Consumer
 
   # This is what travis-worker does. Using this, march_hare would not reconnect, but
   # also not report an exception.
-  # def reporter
-  #   @reporter ||= Reporter.new(connection.create_channel)
-  # end
+  def reporter
+    @reporter ||= Reporter.new(connection.create_channel)
+  end
 end
 
 class Reporter
