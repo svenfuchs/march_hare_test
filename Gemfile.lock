@@ -12,10 +12,16 @@ GIT
 
 GEM
   specs:
+    celluloid (0.12.4)
+      facter (>= 1.6.12)
+      timers (>= 1.0.0)
+    facter (1.7.2)
+    timers (1.1.0)
 
 PLATFORMS
   java
 
 DEPENDENCIES
+  celluloid
   march_hare!
   travis-support!
