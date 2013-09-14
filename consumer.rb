@@ -11,7 +11,10 @@ class Consumer
     @connection = connection
     @name = name
     @num = num
-    @reporter = Reporter.new(name, connection.create_channel)
+    # Creating the reporter early (so it is not created within the `process`
+    # callback) will throw "Attempt to use closed channel" after rabbitmq-server
+    # has been restarted: https://gist.github.com/svenfuchs/e5e5717977d973df6521
+    @reporter = Reporter.new(connection.create_channel)
   end
 
   def subscribe
@@ -35,16 +38,15 @@ class Consumer
     @builds_channel ||= connection.create_channel.tap { |channel| channel.prefetch = 1 }
   end
 
+  # This is what travis-worker does. Using this, march_hare would not reconnect, but
+  # also not report an exception.
   # def reporter
-  #   @reporter ||= Reporter.new(name, connection.create_channel)
+  #   @reporter ||= Reporter.new(connection.create_channel)
   # end
 end
 
 class Reporter
-  attr_reader :name
-
-  def initialize(name, channel)
-    @name = name
+  def initialize(channel)
     @exchange = channel.exchange('reporting', type: :topic, durable: true)
   end
 
